@@ -60,3 +60,7 @@ def mangle(text):
     saved = len(text_bytes) - len(result)
     percent = saved / len(text_bytes) * 100
     return (result, saved, percent)
+
+with open('nudatus.py', 'r') as f:
+    result, saved, percent = mangle(f.read())
+    print(result)
