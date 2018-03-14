@@ -1,13 +1,24 @@
 # -*- coding: utf-8 -*-
+
+# Python 3 style print()
 from __future__ import print_function
+
 import sys
 import token
 import tokenize
+import argparse
 from io import BytesIO
+# tokenize.tokenize exists in python 2 but actually does something
+# different, import the current function for this version
 if sys.version_info < (3, 0):
     from tokenize import generate_tokens as tokenizer
 else:
     from tokenize import tokenize as tokenizer
+
+_VERSION = (0, 0, 1, )
+
+def get_version():
+    return '.'.join([str(i) for i in _VERSION])
 
 def mangle(text):
     """
@@ -18,7 +29,7 @@ def mangle(text):
 
     # Wrap the input script as a byte stream
     buff = BytesIO(text_bytes)
-    # String stream for the mangled script
+    # Byte stream for the mangled script
     mangled = BytesIO()
 
     last_tok = token.INDENT
@@ -63,12 +74,47 @@ def mangle(text):
         last_line = line_e
         last_line_text = line
 
-    # The flashing system expects bytes
-    result = mangled.getvalue().decode('utf-8')
-    saved = len(text_bytes) - len(result)
-    percent = saved / len(text_bytes) * 100
-    return (result, saved, percent)
+    # Return a string
+    return mangled.getvalue().decode('utf-8')
 
-with open('nudatus.py', 'r') as f:
-    result, saved, percent = mangle(f.read())
-    print(result, end='')
+_HELP_TEXT = """
+Strip comments from a Python script.
+
+Please note nudatus only supports the syntax of the Python version it's running
+on so nudatus running on Python 2 only supports scripts in valid Python 2 and
+again for Python 3
+"""
+
+def main(argv=None):
+    """
+    Command line entry point
+    """
+    if not argv:
+        argv = sys.argv[1:]
+
+    parser = argparse.ArgumentParser(description=_HELP_TEXT)
+    parser.add_argument('input', nargs='?', default=None)
+    parser.add_argument('output', nargs='?', default=None)
+    parser.add_argument('--version', action='version',
+                        version='%(prog)s ' + get_version())
+    args = parser.parse_args(argv)
+
+    if not args.input:
+        print("No file specified")
+        sys.exit()
+
+    try:
+        with open(args.input, 'r') as f:
+            res = mangle(f.read())
+            if not args.output:
+                print(res, end='')
+            else:
+                with open(args.output, 'w') as o:
+                    o.write(res)
+    except Exception as ex:
+        print("Error mangling {}: {!s}".format(args.input, ex),
+                file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == '__main__':  # pragma: no cover
+    main(sys.argv[1:])
