@@ -38,6 +38,6 @@ check: clean pycodestyle pyflakes coverage
 package: check
 	python setup.py sdist
 
-publish: check
+publish: check package
 	@echo "\nChecks pass, good to publish..."
-	python setup.py sdist upload
+	twine upload dist/*
