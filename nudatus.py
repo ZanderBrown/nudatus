@@ -40,6 +40,7 @@ def mangle(text):
     last_line = -1
     last_col = 0
     last_line_text = ''
+    open_list_dicts = 0
 
     # Build tokens from the script
     tokens = tokenizer(buff.readline)
@@ -53,9 +54,25 @@ def mangle(text):
                 # Recreate it
                 mangled.write(b' \\\n')
 
+        # We don't want to be calling the this multiple times
+        striped = text.strip()
+
+        # Tokens or charecters for opening or closing a list/dict
+        list_dict_open = [token.LSQB, token.LBRACE, '[', '{']
+        list_dict_close = [token.RSQB, token.RBRACE, ']', '}']
+
+        # If this is a list or dict
+        if t in list_dict_open or striped in list_dict_open:
+            # Increase the dict / list level
+            open_list_dicts += 1
+        elif t in list_dict_close or striped in list_dict_close:
+            # Decrease the dict / list level
+            open_list_dicts -= 1
+
         # If this is a docstring comment
-        if t == token.STRING and (last_tok == token.INDENT or
-           last_tok == token.NEWLINE or last_tok == tokenize.NL):
+        if t == token.STRING and (last_tok == token.INDENT or (
+            (last_tok == token.NEWLINE or last_tok == tokenize.NL)
+                and open_list_dicts == 0)):
             # Output number of lines corresponding those in
             # the docstring comment
             mangled.write(b'\n' * (len(text.split('\n')) - 1))

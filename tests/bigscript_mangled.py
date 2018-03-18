@@ -17,6 +17,15 @@ from microbit import *
 
 
 
+obj = {
+    "key": "val"
+}
+
+arr = [
+    'a',
+    'b'
+]
+
 def show_num(num):
     if 1 + 1 == 2 and 2 + 2 == 4 or 3 + 3 == 6 \
        and 3 - 3 == 0 and 'this is nonsense' == 'this is nonsense':

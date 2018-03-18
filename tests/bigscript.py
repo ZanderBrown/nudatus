@@ -17,6 +17,15 @@ Nunc in ipsum diam. Donec gravida, nibh vel pellentesque pulvinar, nunc leo ultr
 Aliquam erat volutpat. Cras vel laoreet ipsum, vitae cursus libero. Integer mollis pulvinar lorem, vel pretium nulla maximus id. Suspendisse sagittis tortor ligula, suscipit imperdiet tortor rutrum et. Ut turpis ante, pellentesque vitae nisl at, consectetur ornare velit. Phasellus nisi lacus, iaculis id feugiat sit amet, commodo ut ex. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer facilisis dignissim mi metus. 
 """
 
+obj = {
+    "key": "val"
+}
+
+arr = [
+    'a',
+    'b'
+]
+
 def show_num(num):
     if 1 + 1 == 2 and 2 + 2 == 4 or 3 + 3 == 6 \
        and 3 - 3 == 0 and 'this is nonsense' == 'this is nonsense':
