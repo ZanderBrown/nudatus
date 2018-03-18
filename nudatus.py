@@ -12,6 +12,8 @@ from io import BytesIO
 # different, import the current function for this version
 if sys.version_info < (3, 0):
     from tokenize import generate_tokens as tokenizer
+    # This was introduced in Python 3
+    tokenize.ENCODING = None
 else:
     from tokenize import tokenize as tokenizer
 
@@ -63,12 +65,13 @@ def mangle(text):
             # Recreate indentation, ideally we should use tabs
             if col_s > last_col:
                 mangled.write(b' ' * (col_s - last_col))
-            # This is a bit odd by without it the script seems
-            # to be prefixed with utf-8, making it invalid
-            # If someone could tell me why, please do
-            if text != 'utf-8' and last_line != -1:
-                mangled.write(text.encode('utf-8'))
+            # On Python 3 the first token specifies the encoding
+            # but we alredy know it's utf-8 and writing it just
+            # gives us an invalid script
+            if t != tokenize.ENCODING:
+               mangled.write(text.encode('utf-8'))
 
+        # Store the previus state
         last_tok = t
         last_col = col_e
         last_line = line_e
