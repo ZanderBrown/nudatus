@@ -17,7 +17,7 @@ if sys.version_info < (3, 0):
 else:
     from tokenize import tokenize as tokenizer  # pragma: no cover
 
-_VERSION = (0, 0, 1, )
+_VERSION = (0, 0, 2, )
 
 
 def get_version():
