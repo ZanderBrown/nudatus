@@ -12,7 +12,8 @@ with open('CHANGES.rst') as f:
 setup(
     name='nudatus',
     version=get_version(),
-    description='Strip comments from scripts, intened for use with MicroPython and other sorage constrained environments',
+    description='Strip comments from scripts, intened for use with MicroPython'
+                ' and other sorage constrained environments',
     long_description=readme + '\n\n' + changes,
     author='Zander Brown',
     url='https://github.com/zanderbrown/nudatus',

@@ -15,12 +15,14 @@ if sys.version_info < (3, 0):
     # This was introduced in Python 3
     tokenize.ENCODING = None
 else:
-    from tokenize import tokenize as tokenizer
+    from tokenize import tokenize as tokenizer  # pragma: no cover
 
 _VERSION = (0, 0, 1, )
 
+
 def get_version():
     return '.'.join([str(i) for i in _VERSION])
+
 
 def mangle(text):
     """
@@ -53,7 +55,7 @@ def mangle(text):
 
         # If this is a docstring comment
         if t == token.STRING and (last_tok == token.INDENT or
-            last_tok == token.NEWLINE or last_tok == tokenize.NL):
+           last_tok == token.NEWLINE or last_tok == tokenize.NL):
             # Output number of lines corresponding those in
             # the docstring comment
             mangled.write(b'\n' * (len(text.split('\n')) - 1))
@@ -69,7 +71,7 @@ def mangle(text):
             # but we alredy know it's utf-8 and writing it just
             # gives us an invalid script
             if t != tokenize.ENCODING:
-               mangled.write(text.encode('utf-8'))
+                mangled.write(text.encode('utf-8'))
 
         # Store the previus state
         last_tok = t
@@ -80,6 +82,7 @@ def mangle(text):
     # Return a string
     return mangled.getvalue().decode('utf-8')
 
+
 _HELP_TEXT = """
 Strip comments from a Python script.
 
@@ -87,6 +90,7 @@ Please note nudatus only supports the syntax of the Python version it's running
 on so nudatus running on Python 2 only supports scripts in valid Python 2 and
 again for Python 3
 """
+
 
 def main(argv=None):
     """
@@ -103,8 +107,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     if not args.input:
-        print("No file specified")
-        sys.exit()
+        print("No file specified", file=sys.stderr)
+        sys.exit(1)
 
     try:
         with open(args.input, 'r') as f:
@@ -116,8 +120,9 @@ def main(argv=None):
                     o.write(res)
     except Exception as ex:
         print("Error mangling {}: {!s}".format(args.input, ex),
-                file=sys.stderr)
+              file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == '__main__':  # pragma: no cover
     main(sys.argv[1:])
