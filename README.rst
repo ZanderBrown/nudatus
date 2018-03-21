@@ -7,6 +7,8 @@ It's created for use in uflash_ to help squeeze longer programs onto the micro:b
 
 *Note* Nudatus uses the tokenizer built into Python so only supports the syntax of the version it's running on but it's extreamly unlikly this will cause you any issues (print is handled fine)
 
+Personally I pronounce nudatus as new-dat-us which I appreciate is probably 'wrong'
+
 Usage
 --------
 

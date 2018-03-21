@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+nudatus strips comments from Python scripts
+https://pypi.org/project/nudatus/
+
+Copyright (c) 2018 Zander Brown
+
+See the LICENSE file for more information, or visit:
+https://opensource.org/licenses/MIT
+"""
 
 # Python 3 style print()
 from __future__ import print_function
