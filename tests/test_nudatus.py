@@ -41,7 +41,7 @@ def test_mangle_script():
         script = f.read()
     assert len(script) > 0
     with open('tests/bigscript_mangled.py') as f:
-        real_mangled = f.read().encode('utf-8')
+        real_mangled = f.read()
     assert len(real_mangled) > 0
     mangled = nudatus.mangle(script)
     assert mangled == real_mangled
