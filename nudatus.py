@@ -35,7 +35,9 @@ def get_version():
 
 def mangle(text):
     """
-    Takes a script and mangles it to fit inside 8192 bytes if necessary
+    Takes a script and mangles it
+
+    TokenError is thown when encountering bad syntax
     """
 
     text_bytes = text.encode('utf-8')
