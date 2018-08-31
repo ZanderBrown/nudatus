@@ -1,18 +1,18 @@
 Nudatus
 =======
 
-Nudatus is a tool to remove comments from python scripts
+Nudatus is a tool to remove comments from Python scripts.
 
-It's created for use in uflash_ to help squeeze longer programs onto the micro:bit but it should be suitable for various environments with restricted storage
+It was created for use in uflash_ to help squeeze longer programs onto the micro:bit but it should be suitable for various environments with restricted storage.
 
-*Note* Nudatus uses the tokenizer built into Python so only supports the syntax of the version it's running on but it's extreamly unlikly this will cause you any issues (print is handled fine)
+*Note* Nudatus uses the tokenizer built into Python so only supports the syntax of the version it's running on, but it's extremely unlikely this will cause you any issues (print is handled fine).
 
-Personally I pronounce nudatus as new-dat-us which I appreciate is probably 'wrong'
+Personally I pronounce nudatus as new-dat-us which I appreciate is probably 'wrong'.
 
 Usage
 --------
 
-Nudatus is designed to be embedded within a greater tool (like uflash_ or Mu_ by ntoll_) but also provides a CLI tool
+Nudatus is designed to be embedded within a greater tool (like uflash_ or Mu_ by ntoll_) but also provides a CLI tool:
 
 
 .. code:: text
@@ -20,7 +20,7 @@ Nudatus is designed to be embedded within a greater tool (like uflash_ or Mu_ by
     nudatus [-h] [--version] [input] [output]
 
 
-An input file must be specified but if output is omitted the result will be printed on stdout
+An input file must be specified but if output is omitted the result will be printed on stdout.
 
 Calling from a Python script is quite simple:
 
