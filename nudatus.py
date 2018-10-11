@@ -37,7 +37,7 @@ def mangle(text):
     """
     Takes a script and mangles it
 
-    TokenError is thown when encountering bad syntax
+    TokenError is thrown when encountering bad syntax
     """
 
     text_bytes = text.encode('utf-8')
@@ -68,7 +68,7 @@ def mangle(text):
         # We don't want to be calling the this multiple times
         striped = text.strip()
 
-        # Tokens or charecters for opening or closing a list/dict
+        # Tokens or characters for opening or closing a list/dict
         list_dict_open = [token.LSQB, token.LBRACE, '[', '{']
         list_dict_close = [token.RSQB, token.RBRACE, ']', '}']
 
@@ -96,12 +96,12 @@ def mangle(text):
             if col_s > last_col:
                 mangled.write(b' ' * (col_s - last_col))
             # On Python 3 the first token specifies the encoding
-            # but we alredy know it's utf-8 and writing it just
+            # but we already know it's utf-8 and writing it just
             # gives us an invalid script
             if t != tokenize.ENCODING:
                 mangled.write(text.encode('utf-8'))
 
-        # Store the previus state
+        # Store the previous state
         last_tok = t
         last_col = col_e
         last_line = line_e
