@@ -80,9 +80,13 @@ def mangle(text):
             # Decrease the dict / list level
             open_list_dicts -= 1
 
-        # If this is a docstring comment
+        # Remove docstrings
+        # Docstrings are strings not used in an expression,
+        # unfortunatly it isn't as simple as "t is string and t
+        # not in expression"
         if t == token.STRING and (last_tok == token.INDENT or (
-            (last_tok == token.NEWLINE or last_tok == tokenize.NL)
+            (last_tok == token.NEWLINE or last_tok == tokenize.NL or
+            last_tok == token.DEDENT or last_tok == tokenize.ENCODING)
                 and open_list_dicts == 0)):
             # Output number of lines corresponding those in
             # the docstring comment
