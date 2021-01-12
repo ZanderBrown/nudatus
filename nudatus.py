@@ -3,28 +3,18 @@
 nudatus strips comments from Python scripts
 https://pypi.org/project/nudatus/
 
-Copyright (c) 2018 Zander Brown
+© 2018-2021 Zander Brown
 
 See the LICENSE file for more information, or visit:
 https://opensource.org/licenses/MIT
 """
 
-# Python 3 style print()
-from __future__ import print_function
-
+import argparse
 import sys
 import token
 import tokenize
-import argparse
 from io import BytesIO
-# tokenize.tokenize exists in python 2 but actually does something
-# different, import the current function for this version
-if sys.version_info < (3, 0):
-    from tokenize import generate_tokens as tokenizer
-    # This was introduced in Python 3
-    tokenize.ENCODING = None
-else:
-    from tokenize import tokenize as tokenizer  # pragma: no cover
+from tokenize import tokenize as tokenizer
 
 _VERSION = (0, 0, 4, )
 

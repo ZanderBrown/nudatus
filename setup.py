@@ -9,6 +9,27 @@ with open('CHANGES.rst') as f:
     changes = f.read()
 
 
+extras_require = {
+    "tests": [
+        "pytest>=4.6",
+        "pytest-cov",
+        "pytest-random-order>=1.0.0",
+        "pytest-faulthandler",
+        "coverage",
+    ],
+    "package": [
+        # Wheel building and PyPI uploading
+        "wheel",
+        "twine",
+    ],
+}
+
+extras_require["dev"] = extras_require["tests"] + extras_require["package"]
+
+extras_require["all"] = list(
+    {req for extra, reqs in extras_require.items() for req in reqs}
+)
+
 setup(
     name='nudatus',
     version=get_version(),
@@ -27,11 +48,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
+    python_requires=">=3.5",
+    extras_require=extras_require,
     entry_points={
         'console_scripts': ['nudatus=nudatus:main'],
     }

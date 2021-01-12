@@ -2,25 +2,13 @@
 """
 Tests for the nudatus module.
 """
+import builtins
 import sys
-import pytest
-import nudatus
 import tokenize
+from unittest import mock
 
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-else:
-    # mock_open can't read binary data in < 3.4.3
-    # https://bugs.python.org/issue23004
-    if (3, 4) <= sys.version_info < (3, 4, 3):
-        import mock
-
-if sys.version_info.major == 2:
-    import __builtin__ as builtins
-else:
-    import builtins
+import nudatus
+import pytest
 
 
 def test_get_version():
@@ -113,12 +101,3 @@ def test_main_with_bad_script(capfd):
     assert len(out) == 0
     assert len(err) > 0
     assert err.startswith('Error mangling tests/bigscript_bad.py:')
-
-
-def test_tokenizer_import():
-    t = (sys.version_info[0], 23)
-    with mock.patch('sys.version_info', t):
-        if sys.version_info < (3, 0):
-            assert nudatus.tokenizer == tokenize.generate_tokens
-        else:
-            assert nudatus.tokenizer == tokenize.tokenize
