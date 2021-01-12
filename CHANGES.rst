@@ -2,6 +2,7 @@
 -----
 
 * Drop support for everything below Python 3.5
+* Format with black
 
 0.0.2
 -----

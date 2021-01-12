@@ -3,8 +3,6 @@ XARGS := xargs -0 $(shell test $$(uname) = Linux && echo -r)
 all:
 	@echo "\nThere is no default Makefile target right now. Try:\n"
 	@echo "make clean - reset the project and remove auto-generated assets."
-	@echo "make pyflakes - run the PyFlakes code checker."
-	@echo "make pycodestyle - run the PEP8 style checker."
 	@echo "make test - run the test suite."
 	@echo "make coverage - view a report on test coverage."
 	@echo "make check - run all the checkers and tests."
@@ -21,19 +19,22 @@ clean:
 	find . \( -name '*.bak' -o -name dropin.cache \) -print0 | $(XARGS) rm
 	find . \( -name '*.tgz' -o -name dropin.cache \) -print0 | $(XARGS) rm
 
-pyflakes:
-	find . \( -name _build -o -name var -o -path ./tests -o -path ./.env \) -type d  -prune -o -name '*.py' -print0  | $(XARGS) pyflakes
-
-pycodestyle: clean
-	pycodestyle . --exclude .env,tests/bigscript*
-
 test: clean
 	py.test
 
 coverage: clean
 	py.test --cov-report term-missing --cov=nudatus tests/
 
-check: clean pycodestyle pyflakes coverage
+tidy: clean
+	black --check *.py
+	# Don't reformat test data
+	black --check tests/test_*.py
+
+black: clean
+	black --check *.py
+	black --check tests/test_*.py
+
+check: clean black coverage
 
 package: check
 	python setup.py sdist

@@ -16,11 +16,15 @@ import tokenize
 from io import BytesIO
 from tokenize import tokenize as tokenizer
 
-_VERSION = (0, 0, 4, )
+_VERSION = (
+    0,
+    0,
+    4,
+)
 
 
 def get_version():
-    return '.'.join([str(i) for i in _VERSION])
+    return ".".join([str(i) for i in _VERSION])
 
 
 def mangle(text):
@@ -30,7 +34,7 @@ def mangle(text):
     TokenError is thrown when encountering bad syntax
     """
 
-    text_bytes = text.encode('utf-8')
+    text_bytes = text.encode("utf-8")
 
     # Wrap the input script as a byte stream
     buff = BytesIO(text_bytes)
@@ -40,7 +44,7 @@ def mangle(text):
     last_tok = token.INDENT
     last_line = -1
     last_col = 0
-    last_line_text = ''
+    last_line_text = ""
     open_list_dicts = 0
 
     # Build tokens from the script
@@ -51,16 +55,16 @@ def mangle(text):
             # Reset the column
             last_col = 0
             # If the last line ended in a '\' (continuation)
-            if last_line_text.rstrip()[-1:] == '\\':
+            if last_line_text.rstrip()[-1:] == "\\":
                 # Recreate it
-                mangled.write(b' \\\n')
+                mangled.write(b" \\\n")
 
         # We don't want to be calling the this multiple times
         striped = text.strip()
 
         # Tokens or characters for opening or closing a list/dict
-        list_dict_open = [token.LSQB, token.LBRACE, '[', '{']
-        list_dict_close = [token.RSQB, token.RBRACE, ']', '}']
+        list_dict_open = [token.LSQB, token.LBRACE, "[", "{"]
+        list_dict_close = [token.RSQB, token.RBRACE, "]", "}"]
 
         # If this is a list or dict
         if t in list_dict_open or striped in list_dict_open:
@@ -74,13 +78,21 @@ def mangle(text):
         # Docstrings are strings not used in an expression,
         # unfortunatly it isn't as simple as "t is string and t
         # not in expression"
-        if t == token.STRING and (last_tok == token.INDENT or (
-            (last_tok == token.NEWLINE or last_tok == tokenize.NL or
-            last_tok == token.DEDENT or last_tok == tokenize.ENCODING)
-                and open_list_dicts == 0)):
+        if t == token.STRING and (
+            last_tok == token.INDENT
+            or (
+                (
+                    last_tok == token.NEWLINE
+                    or last_tok == tokenize.NL
+                    or last_tok == token.DEDENT
+                    or last_tok == tokenize.ENCODING
+                )
+                and open_list_dicts == 0
+            )
+        ):
             # Output number of lines corresponding those in
             # the docstring comment
-            mangled.write(b'\n' * (len(text.split('\n')) - 1))
+            mangled.write(b"\n" * (len(text.split("\n")) - 1))
         # Or is it a standard comment
         elif t == tokenize.COMMENT:
             # Plain comment, just don't write it
@@ -88,12 +100,12 @@ def mangle(text):
         else:
             # Recreate indentation, ideally we should use tabs
             if col_s > last_col:
-                mangled.write(b' ' * (col_s - last_col))
+                mangled.write(b" " * (col_s - last_col))
             # On Python 3 the first token specifies the encoding
             # but we already know it's utf-8 and writing it just
             # gives us an invalid script
             if t != tokenize.ENCODING:
-                mangled.write(text.encode('utf-8'))
+                mangled.write(text.encode("utf-8"))
 
         # Store the previous state
         last_tok = t
@@ -102,7 +114,7 @@ def mangle(text):
         last_line_text = line
 
     # Return a string
-    return mangled.getvalue().decode('utf-8')
+    return mangled.getvalue().decode("utf-8")
 
 
 _HELP_TEXT = """
@@ -122,10 +134,11 @@ def main(argv=None):
         argv = sys.argv[1:]
 
     parser = argparse.ArgumentParser(description=_HELP_TEXT)
-    parser.add_argument('input', nargs='?', default=None)
-    parser.add_argument('output', nargs='?', default=None)
-    parser.add_argument('--version', action='version',
-                        version='%(prog)s ' + get_version())
+    parser.add_argument("input", nargs="?", default=None)
+    parser.add_argument("output", nargs="?", default=None)
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s " + get_version()
+    )
     args = parser.parse_args(argv)
 
     if not args.input:
@@ -133,18 +146,17 @@ def main(argv=None):
         sys.exit(1)
 
     try:
-        with open(args.input, 'r') as f:
+        with open(args.input, "r") as f:
             res = mangle(f.read())
             if not args.output:
-                print(res, end='')
+                print(res, end="")
             else:
-                with open(args.output, 'w') as o:
+                with open(args.output, "w") as o:
                     o.write(res)
     except Exception as ex:
-        print("Error mangling {}: {!s}".format(args.input, ex),
-              file=sys.stderr)
+        print("Error mangling {}: {!s}".format(args.input, ex), file=sys.stderr)
         sys.exit(1)
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     main(sys.argv[1:])
