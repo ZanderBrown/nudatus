@@ -1,3 +1,8 @@
+0.0.5
+-----
+
+* Drop support for everything below Python 3.5
+
 0.0.2
 -----
 
