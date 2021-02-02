@@ -15,6 +15,7 @@ import token
 import tokenize
 from io import BytesIO
 from tokenize import tokenize as tokenizer
+from typing import List, Optional
 
 _VERSION = (
     0,
@@ -23,11 +24,11 @@ _VERSION = (
 )
 
 
-def get_version():
+def get_version() -> str:
     return ".".join([str(i) for i in _VERSION])
 
 
-def mangle(text):
+def mangle(text: str) -> str:
     """
     Takes a script and mangles it
 
@@ -117,23 +118,17 @@ def mangle(text):
     return mangled.getvalue().decode("utf-8")
 
 
-_HELP_TEXT = """
-Strip comments from a Python script.
-
-Please note nudatus only supports the syntax of the Python version it's running
-on so nudatus running on Python 2 only supports scripts in valid Python 2 and
-again for Python 3
-"""
-
-
-def main(argv=None):
+def main(argv: Optional[List[str]] = None) -> None:
     """
     Command line entry point
     """
     if not argv:
         argv = sys.argv[1:]
 
-    parser = argparse.ArgumentParser(description=_HELP_TEXT)
+    parser = argparse.ArgumentParser(
+        description="Strip comments from a Python script.",
+        epilog="nūdātus “strip, make naked”",
+    )
     parser.add_argument("input", nargs="?", default=None)
     parser.add_argument("output", nargs="?", default=None)
     parser.add_argument(
