@@ -37,7 +37,7 @@ black: clean
 check: clean black coverage
 
 package: check
-	python setup.py sdist
+	python setup.py sdist bdist_wheel
 
 publish: check package
 	@echo "\nChecks pass, good to publish..."
