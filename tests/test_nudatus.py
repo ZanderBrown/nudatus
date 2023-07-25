@@ -52,10 +52,10 @@ def test_main_without_file(capfd):
     with mock.patch("sys.argv", ["nudatus"]):
         with pytest.raises(SystemExit) as ex:
             nudatus.main()
-            assert ex.value.code == 1
-            out, err = capfd.readouterr()
-            assert len(out) == 0
-            assert err == "No file specified"
+        assert ex.value.code == 1
+        out, err = capfd.readouterr()
+        assert len(out) == 0
+        assert err.strip() == "No file specified"
 
 
 def test_main_with_file_without_output_file(capfd):
@@ -95,7 +95,7 @@ def test_main_with_bad_script(capfd):
     with pytest.raises(SystemExit) as ex:
         with mock.patch("sys.argv", ["nudatus", "tests/bigscript_bad.py"]):
             nudatus.main()
-        assert ex.value.code == 1
+    assert ex.value.code == 1
     out, err = capfd.readouterr()
     assert len(out) == 0
     assert len(err) > 0
