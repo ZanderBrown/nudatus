@@ -10,11 +10,13 @@ https://opensource.org/licenses/MIT
 """
 
 import argparse
+import ast
 import sys
 import token
 import tokenize
 from io import BytesIO
 from tokenize import tokenize as tokenizer
+from tokenize import TokenError
 from typing import List, Optional
 
 _VERSION = (
@@ -47,6 +49,15 @@ def mangle(text: str) -> str:
     last_col = 0
     last_line_text = ""
     open_list_dicts = 0
+
+    # Parsing invalid code via the tokenizer is documented as "undefined".
+    # Python 3.12 sometimes successfully parses invalid code.
+    # To restore behavior before Python 3.12, we raise explicitly
+    # if ast cannot parse this:
+    try:
+        ast.parse(text_bytes)
+    except SyntaxError as e:
+        raise TokenError(e)
 
     # Build tokens from the script
     tokens = tokenizer(buff.readline)
